@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: customer-service
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI:http://localhost:9090}
+      fail-fast: true
+      retry:
+        initial-interval: 1000
+
