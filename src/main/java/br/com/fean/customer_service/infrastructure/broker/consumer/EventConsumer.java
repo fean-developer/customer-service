@@ -1,9 +1,8 @@
 package br.com.fean.customer_service.infrastructure.broker.consumer;
 
-import br.com.fean.customer_service.application.CustomerValidationService;
+import br.com.fean.customer_service.application.services.impl.CustomerValidateServiceImpl;
 import br.com.fean.customer_service.utils.JsonUtil;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class EventConsumer {
 
     private final JsonUtil jsonUtil;
-    private final CustomerValidationService customerValidationService;
+    private final CustomerValidateServiceImpl customerValidationService;
 
     @KafkaListener(
             groupId = "${spring.kafka.consumer.group-id}",
@@ -24,7 +23,7 @@ public class EventConsumer {
 
         log.info("Receiving success event {} from validate-customer-success topic", payload);
         var event = jsonUtil.toEvent(payload);
-        customerValidationService.validateCustomer(event);
+        customerValidationService.validate(event);
     }
 
     @KafkaListener(

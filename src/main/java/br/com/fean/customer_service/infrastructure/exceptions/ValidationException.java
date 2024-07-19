@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ValidationException extends RuntimeException {
 
     public ValidationException(String message) {
-        super(message);
+        super("[VALIDATION :: ERROR ::] -> " + message);
     }
 }
