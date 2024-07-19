@@ -44,6 +44,11 @@ public class CustomerValidationService {
         boolean  notHaveName = isEmpty(event.getPayload().getCustomer().getName());
         boolean  notHaveCpf = isEmpty(event.getPayload().getCustomer().getCpf());
 
+        log.info("LOG :: IS EMPTY PAYLOAD OF EVENT: \t[{}]", notHavePayload ? "YES" : "NO");
+        log.info("LOG :: IS EMPTY CUSTOMER OF EVENT: \t[{}]", notHaveCustomer ? "YES" : "NO");
+        log.info("LOG :: IS EMPTY NAME OF CUSTOMER: \t[{}]", notHaveName ? "YES" : "NO");
+        log.info("LOG :: IS EMPTY CPF OF CUSTOMER: \t[{}]", notHaveCpf ? "YES" : "NO");
+
         if (notHavePayload || notHaveCustomer || notHaveName || notHaveCpf) {
             throw new ValidationException("Customer must be informed.");
         }
@@ -51,10 +56,11 @@ public class CustomerValidationService {
         if (isEmpty(event.getPayload().getId()) || isEmpty(event.getTransactionId())) {
             throw new ValidationException("OrderID and TransactionID must be informed!");
         }
-
     }
 
     private void validateExistingCustomer(Event event) {
+        log.info("LOG :: Validating existing customer: {}", event.getPayload().getCustomer().getCpf());
+
         customerRepository.findByCpf(event.getPayload().getCustomer().getCpf()).orElseThrow(
                 () -> new ValidationException("Customer not found.")
         );
@@ -62,6 +68,8 @@ public class CustomerValidationService {
 
     // cretate validation for cpf at and using the class CpfValidator
     private void validateCpf(Event event) {
+
+
         if(!CpfValidator.isValid(event.getPayload().getCustomer().getCpf())) {
             throw new ValidationException("Invalid CPF.");
         }
